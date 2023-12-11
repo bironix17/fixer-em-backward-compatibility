@@ -3,7 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     kotlin("jvm") version "1.8.20"
     application
-    id("com.github.johnrengelman.shadow") version "5.0.0"
+    id("com.github.johnrengelman.shadow") version "8.0.0"
 }
 
 group = "ru.tele2"
@@ -28,8 +28,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("Main")
-    mainClassName = "MainKt"
+    mainClass.set("MainKt")
 }
 
 tasks {
