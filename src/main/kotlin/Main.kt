@@ -5,8 +5,20 @@ fun main(args: Array<String>) {
         } else {
 
             val editor = JsonEditor().apply {
-                removeField("cartridge", "name") // Удаление поля в картридже
-                addField("cartridge", "name", "") // Добавление поля в картридж
+                addField("BroadbandAccessConnectedAlready", "installmentMonthsNumberText", "")
+                addField("BroadbandAccessConnectedAlready", "changeSpeedBlockText", "")
+                addField("BroadbandAccessConnectedAlready", "subscriptionFeeText", "")
+                addField("BroadbandAccessConnectedAlready", "notChangeSpeedInternetTitle", "")
+                addField("BroadbandAccessConnectedAlready", "notChangeSpeedInternetText", "")
+                addField("BroadbandAccessConnectedAlready", "internetSpeedTitle", "")
+                addField("BroadbandAccessConnectedAlready", "subscriptionInternetSpeedText", "")
+                addField("BroadbandAccessConnectedAlready", "subscriptionInternetCostText", "")
+                addField("BroadbandAccessConnectedAlready", "saveChangesPopupTitle", "")
+                addField("BroadbandAccessConnectedAlready", "newSpeedPopupText", "")
+                addField("BroadbandAccessConnectedAlready", "newCostPopupText", "")
+                addField("BroadbandAccessConnectedAlready", "finalPopupTitle", "")
+                addField("BroadbandAccessConnectedAlready", "finalPopupText", "")
+                addField("BroadbandAccessConnectedAlready", "speedSelectionErrorText", "")
             }
             println(editor.processContent(args[0]))
         }
