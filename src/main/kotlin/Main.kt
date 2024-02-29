@@ -6,9 +6,8 @@ fun main(args: Array<String>) {
 
             val editor = JsonEditor().apply {
                 removeField("cartridge", "name") // Удаление поля в картридже
-                addField("cartridge", "name", true) // Добавление поля в картридж
+                addField("cartridge", "name", "") // Добавление поля в картридж
             }
-
             println(editor.processContent(args[0]))
         }
     } catch (e: Exception) {

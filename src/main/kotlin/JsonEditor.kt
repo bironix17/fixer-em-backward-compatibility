@@ -8,21 +8,27 @@ import java.io.IOException
 import java.lang.System.lineSeparator
 import java.util.Scanner
 
+private const val CARTRIDGE_NAME_KEY = "@type"
+
+private data class AddValue(val cartridgeName: String, val fieldName: String, val value: String)
+private data class RemoveValue(val cartridgeName: String, val fieldName: String)
+
 class JsonEditor {
-    private val removeActions: MutableList<(JSONObject, String, MutableIterator<String>) -> Boolean> = arrayListOf()
-    private val addActions: MutableList<(JSONObject) -> Boolean> = arrayListOf()
-    private var updateCounter = 0
+    private val removeFields: MutableList<RemoveValue> = arrayListOf()
+    private val addFields: MutableList<AddValue> = arrayListOf()
+    private var singleFileUpdates = 0
+    private var totalUpdates = 0
 
     fun processContent(path: String): String {
         readDirectory(path)
-        return "Total number of found and edited templates is $updateCounter"
+        return "Total number of found and edited templates is $totalUpdates"
     }
 
     fun removeField(cartridgeName: String, fieldName: String) =
-        removeActions.add(removeFieldAction(cartridgeName, fieldName))
+        removeFields.add(RemoveValue(cartridgeName, fieldName))
 
-    fun addField(cartridgeName: String, fieldName: String, value: Any) =
-        addActions.add(addFieldAction(cartridgeName, fieldName, value))
+    fun addField(cartridgeName: String, fieldName: String, value: String) =
+        addFields.add(AddValue(cartridgeName, fieldName, value))
 
     // рекурсивный обход папок
     private fun readDirectory(rootPath: String) {
@@ -51,11 +57,18 @@ class JsonEditor {
 
             val sb = StringBuilder()
             val scanner = Scanner(FileReader(path))
-            scanner.use { scanner -> while (scanner.hasNextLine()) { sb.append(scanner.nextLine()) } }
+            scanner.use { scanner ->
+                while (scanner.hasNextLine()) {
+                    sb.append(scanner.nextLine())
+                }
+            }
             val baseFile = JSONObject(sb.toString())
-            if (findDesiredObject(baseFile)) {
+            findDesiredObject(baseFile)
+            if (singleFileUpdates > 0) {
                 val writer = FileWriter(path)
                 writer.use { writer -> baseFile.write(writer, 4, 0) }
+                totalUpdates += singleFileUpdates
+                singleFileUpdates = 0
             }
         } catch (e: IOException) {
             System.err.println("Something goes wrong while reading and writing file " + path + lineSeparator() + "Exception: " + e + lineSeparator() + e.message)
@@ -64,56 +77,42 @@ class JsonEditor {
     }
 
     // рекурсивный обход элементов json для массивов
-    private fun findDesiredObject(arr: JSONArray): Boolean {
-        var changed = false
+    private fun findDesiredObject(arr: JSONArray) {
         for (obj in arr) {
-            if (obj is JSONObject) changed = findDesiredObject(obj) || changed
-            else if (obj is JSONArray) changed = findDesiredObject(obj) || changed
+            if (obj is JSONObject) findDesiredObject(obj)
+            else if (obj is JSONArray) findDesiredObject(obj)
         }
-        return changed
     }
 
     // рекурсивный обход элементов json
-    private fun findDesiredObject(obj: JSONObject): Boolean {
-        var changed = false
+    private fun findDesiredObject(obj: JSONObject) {
 
-        val iterator = obj.keySet().iterator()
+        if (obj.containsKey(CARTRIDGE_NAME_KEY))
+            checkAndUpdateCartridge(cartridge = obj, cartridgeName = obj.getString(CARTRIDGE_NAME_KEY))
+
+        val iterator = obj.keys()
         while (iterator.hasNext()) {
-            val key = iterator.next()
-            val child = obj[key]
-            if (child is JSONObject) changed = findDesiredObject(child) || changed
-            if (child is JSONArray) changed = findDesiredObject(child) || changed
-            else {
-                // целевое изменение данных
-                changed =  addActions.map { it(obj) }.firstOrNull { it } ?: changed
-                changed = removeActions.map { it(obj, key, iterator) }.firstOrNull { it } ?: changed
+            when (val value = obj.get(iterator.next())) {
+                is JSONObject -> findDesiredObject(value)
+                is JSONArray -> findDesiredObject(value)
             }
         }
-        return changed
     }
 
-    private fun removeFieldAction(cartridgeName: String, name: String) =
-        { obj: JSONObject, currentField: String, fieldIterator: MutableIterator<String> ->
-            if (isDesiredCartridge(obj, name = cartridgeName) && currentField == name) {
-                fieldIterator.remove()
-                updateCounter++
-                true
+    private fun checkAndUpdateCartridge(cartridgeName: String, cartridge: JSONObject) {
+
+        addFields.filter { cartridgeName == it.cartridgeName && !cartridge.containsKey(it.fieldName) }
+            .map {
+                cartridge.put(it.fieldName, it.value)
+                singleFileUpdates++
             }
-            else false
-        }
 
-
-    private fun addFieldAction(cartridgeName: String, name: String, value: Any) =
-        { obj: JSONObject ->
-            if (isDesiredCartridge(obj, name = cartridgeName)) {
-                obj.put(name, value)
-                updateCounter++
-                true
+        removeFields.filter { cartridgeName == it.cartridgeName && cartridge.containsKey(it.fieldName) }
+            .map {
+                cartridge.remove(it.fieldName)
+                singleFileUpdates++
             }
-            else false
-        }
+    }
 
-
-    private fun isDesiredCartridge(obj: JSONObject, name: String): Boolean =
-        obj.has("@type") && obj.get("@type").toString().equals(name, ignoreCase = true)
+    private fun JSONObject.containsKey(key: String) = this.opt(key) != null
 }
