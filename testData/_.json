@@ -1,0 +1,103 @@
+{
+    "workflowNote": "",
+    "userSegments": [],
+    "workflowState": "INACTIVE",
+    "ecr:lastModifiedBy": "admin",
+    "ecr:lastModified": "2022-08-23T13:59:18.742Z",
+    "startTime": "",
+    "endTime": "",
+    "templateId": "OneColumnPage",
+    "ecr:createDate": "2017-01-13T18:45:20.391Z",
+    "ecr:type": "page",
+    "contentItem": {
+        "@name": "One Column Page",
+        "gtmContainerId": "",
+        "@type": "OneColumnPage",
+        "staticPage": true,
+        "regions": {
+            "@name": "Region",
+            "@type": "Regions",
+            "geoLocationBarEnabled": true
+        },
+        "footer": [{
+            "ruleLimit": "1",
+            "@name": "Footer Slot",
+            "templateTypes": ["Footer"],
+            "templateIds": [],
+            "@type": "ContentSlotFooter",
+            "invisibleWebView": true,
+            "contentPaths": ["/content/Web/Page Footer About T2"]
+        }],
+        "whiteLogo": {
+            "@class": "com.endeca.infront.cartridge.model.MediaObject",
+            "uri": "/"
+        },
+        "menu": {
+            "ruleLimit": "100",
+            "@name": "Site Menu Slot",
+            "templateTypes": ["SiteMenu"],
+            "templateIds": [],
+            "@type": "ContentSlotSiteMenu",
+            "contentPaths": ["/content/Web/Site Menus About T2"]
+        },
+        "blackLogo": {
+            "@class": "com.endeca.infront.cartridge.model.MediaObject",
+            "uri": "/"
+        },
+        "dynamicMenu": {
+            "@name": "dynamicMenu",
+            "@type": ""
+        },
+        "logoLink": {
+            "@name": "logoLink",
+            "@type": ""
+        },
+        "mainContent": [
+            {
+                "@name": "Two Image Tariff Banner",
+                "themeColor": "gray",
+                "@type": "TwoImageTariffBanner",
+                "richText": "<div class=\"row hidden-xs\">\n<div class=\"col-lg-12\">\n<ul class=\"benefits-list\">\n\t<li>\n\t<div class=\"ico\">&nbsp;<\/div>\n\t<span class=\"text\">Выгодно<\/span><\/li>\n\t<li>\n\t<div class=\"ico\">&nbsp;<\/div>\n\t<span class=\"text\">Честно<\/span><\/li>\n\t<li>\n\t<div class=\"ico\">&nbsp;<\/div>\n\t<span class=\"text\">Просто<\/span><\/li>\n<\/ul>\n<\/div>\n<\/div>\n",
+                "aboutLink": {
+                    "@name": "aboutLink",
+                    "@type": ""
+                },
+                "leftImage": {
+                    "contentWidth": "508",
+                    "@class": "com.endeca.infront.cartridge.model.MediaObject",
+                    "contentBytes": "218079",
+                    "contentType": "unknown",
+                    "contentSrcKey": "media-internal-binary",
+                    "uri": "/api/media/asset?mediaId=m20005",
+                    "contentHeight": "400"
+                },
+                "rightImage": {
+                    "contentWidth": "613",
+                    "@class": "com.endeca.infront.cartridge.model.MediaObject",
+                    "contentBytes": "56059",
+                    "contentType": "unknown",
+                    "contentSrcKey": "media-internal-binary",
+                    "uri": "/api/media/asset?mediaId=m30021",
+                    "contentHeight": "558"
+                }
+            },
+            {
+                "ruleLimit": 10,
+                "@name": "Main Content Slot",
+                "templateTypes": ["MainContent"],
+                "templateIds": [],
+                "@type": "ContentSlotMain",
+                "contentPaths": ["/content/Web/About Tele2 Page Slides"]
+            }
+        ],
+        "header": [{
+            "ruleLimit": 1,
+            "@name": "Header Slot",
+            "templateTypes": ["Header"],
+            "templateIds": [],
+            "@type": "ContentSlotHeader",
+            "invisibleWebView": true,
+            "contentPaths": ["/content/Web/NewHeaderandMenu/PageHeaders1/SectionPageHeader1"]
+        }]
+    }
+}
