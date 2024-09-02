@@ -1,0 +1,17 @@
+{
+    "workflowNote": "",
+    "ecr:lastModifiedBy": "admin",
+    "ecr:lastModified": "2017-03-12T20:34:11.641Z",
+    "contentType": "Page",
+    "ecr:createDate": "2017-02-16T10:42:28.701Z",
+    "ecr:type": "page",
+    "contentItem": {
+        "ruleLimit": "1",
+        "@name": "Dynamic Page Slot",
+        "templateTypes": ["Page"],
+        "templateIds": [],
+        "@type": "PageSlot",
+        "staticPage": true,
+        "contentPaths": ["/content/Web/News/Pages/News Article List"]
+    }
+}

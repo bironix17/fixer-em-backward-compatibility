@@ -57,16 +57,16 @@ class JsonEditor {
 
             val sb = StringBuilder()
             val scanner = Scanner(FileReader(path))
-            scanner.use { scanner ->
-                while (scanner.hasNextLine()) {
-                    sb.append(scanner.nextLine())
+            scanner.use {
+                while (it.hasNextLine()) {
+                    sb.append(it.nextLine())
                 }
             }
             val baseFile = JSONObject(sb.toString())
             findDesiredObject(baseFile)
             if (singleFileUpdates > 0) {
                 val writer = FileWriter(path)
-                writer.use { writer -> baseFile.write(writer, 4, 0) }
+                writer.use { baseFile.write(it, 4, 0) }
                 totalUpdates += singleFileUpdates
                 singleFileUpdates = 0
             }
@@ -99,6 +99,7 @@ class JsonEditor {
         }
     }
 
+    // непосредственная обработка картриджа
     private fun checkAndUpdateCartridge(cartridgeName: String, cartridge: JSONObject) {
 
         addFields.filter { cartridgeName == it.cartridgeName && !cartridge.containsKey(it.fieldName) }
